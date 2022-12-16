@@ -1,2 +1,3 @@
-# aloha
+# aloha 🏝️
+
 Generic template generator
