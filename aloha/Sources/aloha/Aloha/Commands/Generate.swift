@@ -12,7 +12,8 @@ extension Runner {
             GenerateTemplateUseCase(
                 fileManager: FileHelperImpl(),
                 template: template
-            ).start()
+            )
+            .start()
         }
     }
 }
