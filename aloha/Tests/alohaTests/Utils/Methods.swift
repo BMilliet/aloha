@@ -2,5 +2,6 @@ enum Methods {
     case fileHelperHomePathCalled,
          fileHelperExistCalled,
          fileHelperListCalled,
-         fileHelperCreateCalled
+         fileHelperCreateCalled,
+         fileHelperReadFileCalled
 }

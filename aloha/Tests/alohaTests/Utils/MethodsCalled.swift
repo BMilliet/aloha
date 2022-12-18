@@ -1,17 +1,14 @@
-import Foundation
-
 final class MethodsCalled {
-    static let shared = MethodsCalled()
 
-    private init() {}
+    var called = [Methods]()
 
-    static var called = [Methods]()
+    init() {}
 
-    static func add(_ method: Methods) {
+    func add(_ method: Methods) {
         called.append(method)
     }
 
-    static func clear() {
+    func clear() {
         called = []
     }
 }

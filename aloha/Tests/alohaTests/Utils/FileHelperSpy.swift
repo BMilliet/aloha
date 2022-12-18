@@ -6,24 +6,32 @@ struct FileHelperSpy: FileHelper {
     var existReturn = false
     var listReturn: [String]? = nil
     var createReturn = false
+    var fileToRead = ""
+
+    var methods: MethodsCalled
 
     func homePath() -> String {
-        MethodsCalled.add(.fileHelperHomePathCalled)
+        methods.add(.fileHelperHomePathCalled)
         return homePathReturn
     }
     
     func exist(_ file: String) -> Bool {
-        MethodsCalled.add(.fileHelperExistCalled)
+        methods.add(.fileHelperExistCalled)
         return existReturn
     }
     
     func list(_ path: String) -> [String]? {
-        MethodsCalled.add(.fileHelperListCalled)
+        methods.add(.fileHelperListCalled)
         return listReturn
     }
     
-    func create(_ file: String, withIntermediateDirectories: Bool) -> Bool {
-        MethodsCalled.add(.fileHelperCreateCalled)
+    func createDir(_ file: String, withIntermediateDirectories: Bool) -> Bool {
+        methods.add(.fileHelperCreateCalled)
         return createReturn
+    }
+
+    func readFile(_ path: String) -> String {
+        methods.add(.fileHelperReadFileCalled)
+        return fileToRead
     }
 }

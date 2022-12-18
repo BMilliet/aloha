@@ -11,6 +11,7 @@ extension Runner {
         func run() throws {
             GenerateTemplateUseCase(
                 fileManager: FileHelperImpl(),
+                ui: UIImpl(),
                 template: template
             )
             .start()

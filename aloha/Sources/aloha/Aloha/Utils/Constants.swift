@@ -1,3 +1,3 @@
 struct Constants {
-    static var templateDir = ".aloha"
+    static var templateDir = ".aloha/templates"
 }

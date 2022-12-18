@@ -6,7 +6,8 @@ protocol FileHelper {
     func list(_ path: String) -> [String]?
 
     @discardableResult
-    func create(_ file: String, withIntermediateDirectories: Bool) -> Bool
+    func createDir(_ file: String, withIntermediateDirectories: Bool) -> Bool
+    func readFile(_ path: String) -> String
 }
 
 struct FileHelperImpl: FileHelper {
@@ -28,20 +29,25 @@ struct FileHelperImpl: FileHelper {
         }
     }
 
-    func create(_ file: String, withIntermediateDirectories: Bool = false) -> Bool {
-//        guard let url = URL(string: file) else {
-//            return false
-//        }
-//
-//        do {
-//            try fileManager.createDirectory(
-//                at: url,
-//                withIntermediateDirectories: withIntermediateDirectories
-//            )
-//        } catch {
-//            return false
-//        }
+    func createDir(_ file: String, withIntermediateDirectories: Bool = false) -> Bool {
+        let url = URL(filePath: file)
+
+        do {
+            try fileManager.createDirectory(
+                at: url,
+                withIntermediateDirectories: withIntermediateDirectories
+            )
+        } catch {
+            print("could not create file")
+            print("error => \(error.localizedDescription)")
+            return false
+        }
 
         return true
+    }
+
+    func readFile(_ path: String) -> String {
+        print("readed file: \(path)")
+        return ""
     }
 }

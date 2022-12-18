@@ -2,42 +2,63 @@ import Foundation
 
 struct GenerateTemplateUseCase {
     let fileManager: FileHelper
+    let ui: UI
     let template: String
 
     func start() {
         let home = fileManager.homePath()
         let templates = home + Constants.templateDir
 
-        validateTemplateName(template)
-        validateIfUserHaveTemplateDir(templates)
-        let targetTemplate = findPath(target: template, in: templates)
-    }
+        ui.message("home => \(home)")
+        ui.message("templates => \(templates)")
 
-    private func validateTemplateName(_ template: String) {
-        if template.isEmpty || template.contains("/") || template.contains(".") {
-            print("Invalid name")
-            exit(1)
-        }
-    }
-
-    private func validateIfUserHaveTemplateDir(_ templates: String) {
-        if !fileManager.exist(templates) {
-            fileManager.create(templates, withIntermediateDirectories: false)
-        }
-    }
-
-    private func findPath(target template: String, in templates: String) -> String {
-        guard let files = fileManager.list(templates) else {
-            print("Could not list templates")
-            exit(1)
+        if invalidTemplateName(template) {
+            print("invalid template")
+            return
         }
 
-        for e in files {
-            if e == template {
-                return e
+        if !userHaveTemplateDir(templates) {
+            createTemplateDir(templates)
+        }
+
+        guard let targetTemplate = findPath(target: template, in: templates) else {
+            ui.error("Could not find template")
+            return
+        }
+
+        readTemplate(targetTemplate)
+
+        ui.message("choosen template => \(targetTemplate)")
+    }
+
+    private func invalidTemplateName(_ template: String) -> Bool {
+        return template.isEmpty ||
+        template.contains("/") ||
+        template.contains(".")
+    }
+
+    private func userHaveTemplateDir(_ templates: String) -> Bool {
+        return fileManager.exist(templates)
+    }
+
+    private func createTemplateDir(_ templates: String) {
+        fileManager.createDir(templates, withIntermediateDirectories: true)
+    }
+
+    private func findPath(target template: String, in templates: String) -> String? {
+        if let files = fileManager.list(templates) {
+
+            for e in files {
+                if e == template {
+                    return e
+                }
             }
         }
 
-        exit(1)
+        return nil
+    }
+
+    private func readTemplate(_ path: String) -> String {
+        return fileManager.readFile(path)
     }
 }
