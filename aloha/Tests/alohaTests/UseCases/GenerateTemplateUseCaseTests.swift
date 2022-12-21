@@ -13,22 +13,22 @@ final class GenerateTemplateUseCaseTests: XCTestCase {
         fileHelper.homePathReturn = "mock/path"
         fileHelper.listReturn = ["template1", "template2"]
         fileHelper.existReturn = true
-        
+
         GenerateTemplateUseCase(
             fileManager: fileHelper,
             ui: ui,
-            template: "template1"
+            template: "template1",
+            name: "aloha"
         ).start()
-        
+
         let expected: [Methods] = [
             .fileHelperHomePathCalled,
             .fileHelperExistCalled,
             .fileHelperListCalled,
             .fileHelperReadFileCalled
         ]
-        
+
         XCTAssertEqual(methodsCalled.called, expected)
-        XCTAssertTrue(true)
     }
 
     func testUserDontHaveTemplate() throws {
@@ -41,21 +41,21 @@ final class GenerateTemplateUseCaseTests: XCTestCase {
         fileHelper.homePathReturn = "mock/path"
         fileHelper.listReturn = ["template2"]
         fileHelper.existReturn = true
-        
+
         GenerateTemplateUseCase(
             fileManager: fileHelper,
             ui: ui,
-            template: "template1"
+            template: "template1",
+            name: "aloha"
         ).start()
-        
+
         let expected: [Methods] = [
             .fileHelperHomePathCalled,
             .fileHelperExistCalled,
             .fileHelperListCalled,
         ]
-        
+
         XCTAssertEqual(methodsCalled.called, expected)
-        XCTAssertTrue(true)
     }
 
     func testUserDontHaveTemplatesDir() throws {
@@ -67,21 +67,21 @@ final class GenerateTemplateUseCaseTests: XCTestCase {
         fileHelper.createReturn = false
         fileHelper.homePathReturn = "mock/path"
         fileHelper.existReturn = false
-        
+
         GenerateTemplateUseCase(
             fileManager: fileHelper,
             ui: ui,
-            template: "template1"
+            template: "template1",
+            name: "aloha"
         ).start()
-        
+
         let expected: [Methods] = [
             .fileHelperHomePathCalled,
             .fileHelperExistCalled,
             .fileHelperCreateCalled,
             .fileHelperListCalled,
         ]
-        
+
         XCTAssertEqual(methodsCalled.called, expected)
-        XCTAssertTrue(true)
     }
 }

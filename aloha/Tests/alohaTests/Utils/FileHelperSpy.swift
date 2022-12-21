@@ -30,7 +30,7 @@ struct FileHelperSpy: FileHelper {
         return createReturn
     }
 
-    func readFile(_ path: String) -> String {
+    func readFile(_ path: String) -> String? {
         methods.add(.fileHelperReadFileCalled)
         return fileToRead
     }
