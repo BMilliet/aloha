@@ -6,38 +6,54 @@ struct GenerateTemplateUseCase {
     
     let template: String
     let name: String
-    
+
     func start() {
         let home = fileManager.homePath()
-        let templates = home + Constants.templateDir
+        let templatesDir = home + Constants.templateDir
         
         ui.debug("search template: \(template)")
         ui.debug("input name: \(name)")
         
         ui.debug("home => \(home)")
-        ui.debug("templates => \(templates)")
+        ui.debug("templates => \(templatesDir)")
         
         if invalidTemplateName(template) {
             ui.error("invalid template")
             return
         }
         
-        createTemplateDirIfNeeded(templates)
+        createTemplateDirIfNeeded(templatesDir)
         
-        guard let targetTemplate = findPath(target: template, in: templates) else {
+        guard let targetTemplatePath = findPath(target: template, in: templatesDir) else {
             ui.error("Could not find template")
             return
         }
         
-        readTemplate(targetTemplate)
+        let template = getTemplate(targetTemplatePath)
+
+        template?.targets.forEach {
+            doSomething(templatesDir: templatesDir, $0)
+        }
+
+        print(fileManager.currentDir())
+    }
+
+    private func doSomething(templatesDir: String, _ item: ItemControl) {
+        let modelPath = "\(templatesDir)/\(template)/\(item.model)"
+        let modelName = URL(filePath: modelPath).lastPathComponent
         
-        ui.message("choosen template => \(targetTemplate)")
+        print(modelPath)
+        print(modelName)
+
+        print("🌴 Copying template...")
+
+        fileManager.copy(from: modelPath, to: "\(item.destination)/\(modelName)")
     }
     
-    private func createTemplateDirIfNeeded(_ templates: String) {
-        if !userHaveTemplateDir(templates) {
+    private func createTemplateDirIfNeeded(_ templatesDir: String) {
+        if !userHaveTemplateDir(templatesDir) {
             ui.debug("No templates dir found\nCreating templates dir...")
-            createTemplateDir(templates)
+            createTemplateDir(templatesDir)
         }
     }
     
@@ -47,20 +63,20 @@ struct GenerateTemplateUseCase {
         template.contains(".")
     }
     
-    private func userHaveTemplateDir(_ templates: String) -> Bool {
-        return fileManager.exist(templates)
+    private func userHaveTemplateDir(_ templatesDir: String) -> Bool {
+        return fileManager.exist(templatesDir)
     }
     
-    private func createTemplateDir(_ templates: String) {
-        fileManager.createDir(templates, withIntermediateDirectories: true)
+    private func createTemplateDir(_ templatesDir: String) {
+        fileManager.createDir(templatesDir, withIntermediateDirectories: true)
     }
     
-    private func findPath(target template: String, in templates: String) -> String? {
-        if let files = fileManager.list(templates) {
+    private func findPath(target template: String, in templatesDir: String) -> String? {
+        if let files = fileManager.list(templatesDir) {
             
             for e in files {
                 if e == template {
-                    return "\(templates)/\(e)"
+                    return "\(templatesDir)/\(e)"
                 }
             }
         }
@@ -68,13 +84,11 @@ struct GenerateTemplateUseCase {
         return nil
     }
     
-    private func readTemplate(_ path: String) -> String? {
+    private func getTemplate(_ path: String) -> TemplateControl? {
         guard let data = fileManager.readFile("\(path)/control.json")?.data(using: .utf8) else {
             return nil
         }
 
-        let model = JsonHelper.decode(type: TemplateControl.self, data)
-        print(model)
-        return ""
+        return JsonHelper.decode(type: TemplateControl.self, data)
     }
 }

@@ -1,3 +1,5 @@
+import Foundation
+
 @testable import aloha
 
 struct FileHelperSpy: FileHelper {
@@ -24,7 +26,11 @@ struct FileHelperSpy: FileHelper {
         methods.add(.fileHelperListCalled)
         return listReturn
     }
-    
+
+    func listAbsolute(_ path: String) -> [URL] {
+        return [URL]()
+    }
+
     func createDir(_ file: String, withIntermediateDirectories: Bool) -> Bool {
         methods.add(.fileHelperCreateCalled)
         return createReturn
@@ -33,5 +39,17 @@ struct FileHelperSpy: FileHelper {
     func readFile(_ path: String) -> String? {
         methods.add(.fileHelperReadFileCalled)
         return fileToRead
+    }
+
+    func isDir(_ path: String) -> Bool? {
+        return false
+    }
+
+    func currentDir() -> String {
+        return ""
+    }
+
+    func copy(from: String, to: String) {
+        //
     }
 }
