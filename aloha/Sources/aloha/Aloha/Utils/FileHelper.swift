@@ -4,7 +4,6 @@ protocol FileHelper {
     func homePath() -> String
     func exist(_ file: String) -> Bool
     func list(_ path: String) -> [String]?
-    func listAbsolute(_ path: String) -> [URL]
     func isDir(_ path: String) -> Bool?
     func currentDir() -> String
 
@@ -37,19 +36,6 @@ struct FileHelperImpl: FileHelper {
 
     func list(_ path: String) -> [String]? {
         return try? fileManager.contentsOfDirectory(atPath: path)
-    }
-
-    func listAbsolute(_ path: String) -> [URL] {
-        var content = [URL]()
-
-        let url = URL(filePath: path)
-        if let dir = fileManager.enumerator(at: url, includingPropertiesForKeys: nil) {
-            for case let f as URL in dir {
-                content.append(f)
-            }
-        }
-
-        return content
     }
 
     func createDir(_ file: String, withIntermediateDirectories: Bool = false) -> Bool {

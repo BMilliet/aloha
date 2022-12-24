@@ -1,14 +1,19 @@
 import Foundation
+import XCTest
 
 @testable import aloha
 
 struct FileHelperSpy: FileHelper {
 
-    var homePathReturn = ""
-    var existReturn = false
-    var listReturn: [String]? = nil
-    var createReturn = false
-    var fileToRead = ""
+    var currentDirReturn = ""
+    var createDirReturn = false
+    var homePathReturn = "AlohaHome"
+    var existReturn: [String: Bool] = [String: Bool]()
+    var isDirReturn: [String: Bool] = [String: Bool]()
+    var fileToRead: [String: String] = [String: String]()
+    var listReturn: [String: [String]] = [String: [String]]()
+
+    
 
     var methods: MethodsCalled
 
@@ -18,46 +23,67 @@ struct FileHelperSpy: FileHelper {
     }
     
     func exist(_ file: String) -> Bool {
-        methods.add(.fileHelperExistCalled)
-        return existReturn
+        methods.add(.fileHelperExistCalled(path: file))
+        do {
+            return try XCTUnwrap(existReturn[file])
+        } catch {
+            XCTFail("❌ exist => \(file)")
+        }
+        return false
     }
     
     func list(_ path: String) -> [String]? {
-        methods.add(.fileHelperListCalled)
-        return listReturn
-    }
-
-    func listAbsolute(_ path: String) -> [URL] {
-        return [URL]()
+        methods.add(.fileHelperListCalled(path: path))
+        do {
+            return try XCTUnwrap(listReturn[path])
+        } catch {
+            XCTFail("❌ list => \(path)")
+        }
+        return nil
     }
 
     func createDir(_ file: String, withIntermediateDirectories: Bool) -> Bool {
-        methods.add(.fileHelperCreateCalled)
-        return createReturn
+        methods.add(.fileHelperCreateDirCalled(
+            path: file,
+            withIntermediateDirectories: withIntermediateDirectories)
+        )
+        return createDirReturn
     }
 
     func readFile(_ path: String) -> String? {
-        methods.add(.fileHelperReadFileCalled)
-        return fileToRead
+        methods.add(.fileHelperReadFileCalled(path: path))
+        do {
+            return try XCTUnwrap(fileToRead[path])
+        } catch {
+            XCTFail("❌ readFile => \(path)")
+        }
+        return nil
     }
 
     func isDir(_ path: String) -> Bool? {
+        methods.add(.fileHelperIsDirCalled(path: path))
+        do {
+            return try XCTUnwrap(isDirReturn[path])
+        } catch {
+            XCTFail("❌ isDir => \(path)")
+        }
         return false
     }
 
     func currentDir() -> String {
-        return ""
+        methods.add(.fileHelperCurrentDirCalled)
+        return currentDirReturn
     }
 
     func copy(from: String, to: String) {
-        //
+        methods.add(.fileHelperCopy(from: from, to: to))
     }
 
     func move(from: String, to: String) {
-        //
+        methods.add(.fileHelperMove(from: from, to: to))
     }
 
     func write(content: String, path: String) {
-        //
+        methods.add(.fileHelperWrite(content: content, path: path))
     }
 }

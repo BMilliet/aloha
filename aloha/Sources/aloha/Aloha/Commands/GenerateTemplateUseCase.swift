@@ -13,6 +13,7 @@ struct GenerateTemplateUseCase {
 
         if invalidTemplateName() {
             ui.error("invalid template")
+            ui.error("avoid using dot and slash")
             return
         }
 
@@ -24,8 +25,8 @@ struct GenerateTemplateUseCase {
         }
 
         let templateModel = getTemplate(jsonPath: targetTemplatePath,
-                                   originAbs: "\(templatesDir)/\(template)",
-                                   destAbs: fileManager.currentDir())
+                                        originAbs: "\(templatesDir)/\(template)",
+                                        destAbs: fileManager.currentDir())
 
         templateModel?.targets.forEach {
             copyAndRename($0, templatesDir)
@@ -34,7 +35,7 @@ struct GenerateTemplateUseCase {
         ui.message("🤙 Template \(template) generated with name \(name)")
     }
 
-    private func copyAndRename(_ item: ItemModel, _ templatesDir: String) {
+    private func copyAndRename(_ item: ItemControl, _ templatesDir: String) {
         let name = URL(filePath: item.model).lastPathComponent
         let destination = "\(item.destination)/\(name)"
         fileManager.copy(from: item.model, to: destination)
@@ -45,7 +46,7 @@ struct GenerateTemplateUseCase {
         var filePath = file
 
         if file.contains(Constants.replacePattern) {
-            filePath = rename(file)
+            filePath = replace(file)
             fileManager.move(from: file, to: filePath)
         }
 
@@ -60,12 +61,12 @@ struct GenerateTemplateUseCase {
             }
         } else {
             guard var fileContent = fileManager.readFile(filePath) else { return }
-            fileContent = rename(fileContent)
+            fileContent = replace(fileContent)
             fileManager.write(content: fileContent, path: filePath)
         }
     }
 
-    private func rename(_ str: String) -> String {
+    private func replace(_ str: String) -> String {
         return str.replacingOccurrences(of: Constants.replacePattern, with: name)
     }
 
@@ -102,13 +103,11 @@ struct GenerateTemplateUseCase {
         return nil
     }
 
-    private func getTemplate(jsonPath: String, originAbs: String, destAbs: String) -> TemplateModel? {
+    private func getTemplate(jsonPath: String, originAbs: String, destAbs: String) -> TemplateControl? {
         if let template = getOriginalTemplate(jsonPath) {
-            return TemplateModelFactory.build(
-                template,
-                originAbs: originAbs,
-                destAbs: destAbs
-            )
+            return convertToAbsolutePaths(template,
+                                          originAbs: originAbs,
+                                          destAbs: destAbs)
         }
         return nil
     }
@@ -118,5 +117,17 @@ struct GenerateTemplateUseCase {
             return JsonHelper.decode(type: TemplateControl.self, data)
         }
         return nil
+    }
+    
+    private func convertToAbsolutePaths(_ control: TemplateControl,
+                                        originAbs: String,
+                                        destAbs: String) -> TemplateControl {
+
+        let item = control.targets.map {
+            ItemControl(model: "\(originAbs)/\($0.model)",
+                        destination: "\(destAbs)/\($0.destination)")
+        }
+
+        return TemplateControl(targets: item)
     }
 }
