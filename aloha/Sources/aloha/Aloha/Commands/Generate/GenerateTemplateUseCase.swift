@@ -115,7 +115,7 @@ struct GenerateTemplateUseCase {
         }
         return nil
     }
-    
+
     private func convertToAbsolutePaths(_ control: TemplateControl,
                                         originAbs: String,
                                         destAbs: String) -> TemplateControl {
