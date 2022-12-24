@@ -72,9 +72,67 @@ final class GenerateTemplateUseCaseTests: XCTestCase {
     }
 
     func testUserDontHaveTemplate() throws {
+                let methodsCalled = MethodsCalled()
+
+        var fileHelper = FileHelperSpy(methods: methodsCalled)
+        let ui = UISpy()
+
+        let existingFiles = ["mock/path/.aloha/templates": false]
+
+        var listReturn: [String: [String]] = ["mock/path/.aloha/templates": ["template1"]]
+        listReturn["CurrentDirPath/SomeProject/alohaExampleDir"] = []
+
+        fileHelper.createDirReturn = false
+        fileHelper.currentDirReturn = "CurrentDirPath"
+        fileHelper.homePathReturn = "mock/path/"
+        fileHelper.listReturn = listReturn
+        fileHelper.existReturn = existingFiles
+
+        GenerateTemplateUseCase(
+            fileManager: fileHelper,
+            ui: ui,
+            template: "template1",
+            name: "aloha"
+        ).start()
+
+        let expected: [Methods] = [
+            .fileHelperHomePathCalled,
+            .fileHelperExistCalled(path: "mock/path/.aloha/templates"),
+            .fileHelperCreateDirCalled(path: "mock/path/.aloha/templates",
+                                       withIntermediateDirectories: true)
+        ]
+
+        XCTAssertEqual(methodsCalled.called, expected)
     }
 
     func testUserDontHaveTemplatesDir() throws {
+        let methodsCalled = MethodsCalled()
 
+        var fileHelper = FileHelperSpy(methods: methodsCalled)
+        let ui = UISpy()
+
+        let existingFiles = ["mock/path/.aloha/templates": true]
+        let listReturn: [String: [String]] = ["mock/path/.aloha/templates": ["template2"]]
+
+        fileHelper.createDirReturn = false
+        fileHelper.currentDirReturn = "CurrentDirPath"
+        fileHelper.homePathReturn = "mock/path/"
+        fileHelper.listReturn = listReturn
+        fileHelper.existReturn = existingFiles
+
+        GenerateTemplateUseCase(
+            fileManager: fileHelper,
+            ui: ui,
+            template: "template1",
+            name: "aloha"
+        ).start()
+
+        let expected: [Methods] = [
+            .fileHelperHomePathCalled,
+            .fileHelperExistCalled(path: "mock/path/.aloha/templates"),
+            .fileHelperListCalled(path: "mock/path/.aloha/templates"),
+        ]
+
+        XCTAssertEqual(methodsCalled.called, expected)
     }
 }

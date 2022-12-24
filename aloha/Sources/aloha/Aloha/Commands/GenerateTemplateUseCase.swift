@@ -17,7 +17,11 @@ struct GenerateTemplateUseCase {
             return
         }
 
-        createTemplateDirIfNeeded(templatesDir)
+        if !userHaveTemplateDir(templatesDir) {
+            ui.error("No templates dir found\nCreating templates dir...")
+            createTemplateDir(templatesDir)
+            return
+        }
 
         guard let targetTemplatePath = findTemplatePath(in: templatesDir) else {
             ui.error("Could not find template")
@@ -68,13 +72,6 @@ struct GenerateTemplateUseCase {
 
     private func replace(_ str: String) -> String {
         return str.replacingOccurrences(of: Constants.replacePattern, with: name)
-    }
-
-    private func createTemplateDirIfNeeded(_ templatesDir: String) {
-        if !userHaveTemplateDir(templatesDir) {
-            ui.debug("No templates dir found\nCreating templates dir...")
-            createTemplateDir(templatesDir)
-        }
     }
 
     private func invalidTemplateName() -> Bool {
