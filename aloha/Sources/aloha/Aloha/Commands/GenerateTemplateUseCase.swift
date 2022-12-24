@@ -21,33 +21,65 @@ struct GenerateTemplateUseCase {
             ui.error("invalid template")
             return
         }
-        
+
         createTemplateDirIfNeeded(templatesDir)
-        
+
         guard let targetTemplatePath = findPath(target: template, in: templatesDir) else {
             ui.error("Could not find template")
             return
         }
-        
-        let template = getTemplate(targetTemplatePath)
+
+        let template = getTemplate(jsonPath: targetTemplatePath,
+                                   originAbs: "\(templatesDir)/\(template)",
+                                   destAbs: fileManager.currentDir())
+
+        print("==========")
+        print(template?.targets)
+        print("==========")
 
         template?.targets.forEach {
-            doSomething(templatesDir: templatesDir, $0)
+            copyAndRename($0, templatesDir)
         }
-
-        print(fileManager.currentDir())
     }
 
-    private func doSomething(templatesDir: String, _ item: ItemControl) {
-        let modelPath = "\(templatesDir)/\(template)/\(item.model)"
-        let modelName = URL(filePath: modelPath).lastPathComponent
-        
-        print(modelPath)
-        print(modelName)
+    private func copyAndRename(_ item: ItemModel, _ templatesDir: String) {
+        let name = URL(filePath: item.model).lastPathComponent
+        let destination = "\(item.destination)/\(name)"
+        fileManager.copy(from: item.model, to: destination)
+        renameContent(destination)
+    }
 
-        print("🌴 Copying template...")
+    private func renameContent(_ file: String) {
+        print("LOCKING FILE")
+        print(file)
+        var filePath = file
 
-        fileManager.copy(from: modelPath, to: "\(item.destination)/\(modelName)")
+        if file.contains("__name__") {
+            print("Rename file name")
+            filePath = rename(file, name: name)
+            fileManager.move(from: file, to: filePath)
+            print(filePath)
+        }
+
+        if fileManager.isDir(filePath) ?? false {
+            print("is dir")
+            fileManager.list(filePath)?.forEach {
+                renameContent("\(filePath)/\($0)")
+            }
+        } else {
+            print("========== file ==========")
+            guard var fileContent = fileManager.readFile(filePath) else {
+                print("could not read file => \(filePath)")
+                return
+            }
+
+            fileContent = rename(fileContent, name: name)
+            fileManager.write(content: fileContent, path: filePath)
+        }
+    }
+
+    private func rename(_ str: String, name: String) -> String {
+        return str.replacingOccurrences(of: "__name__", with: name)
     }
     
     private func createTemplateDirIfNeeded(_ templatesDir: String) {
@@ -73,22 +105,32 @@ struct GenerateTemplateUseCase {
     
     private func findPath(target template: String, in templatesDir: String) -> String? {
         if let files = fileManager.list(templatesDir) {
-            
+
             for e in files {
                 if e == template {
                     return "\(templatesDir)/\(e)"
                 }
             }
         }
-        
+
         return nil
     }
-    
-    private func getTemplate(_ path: String) -> TemplateControl? {
-        guard let data = fileManager.readFile("\(path)/control.json")?.data(using: .utf8) else {
-            return nil
-        }
 
-        return JsonHelper.decode(type: TemplateControl.self, data)
+    private func getTemplate(jsonPath: String, originAbs: String, destAbs: String) -> TemplateModel? {
+        if let template = getOriginalTemplate(jsonPath) {
+            return TemplateModelFactory.build(
+                template,
+                originAbs: originAbs,
+                destAbs: destAbs
+            )
+        }
+        return nil
+    }
+
+    private func getOriginalTemplate(_ path: String) -> TemplateControl? {
+        if let data = fileManager.readFile("\(path)/control.json")?.data(using: .utf8) {
+            return JsonHelper.decode(type: TemplateControl.self, data)
+        }
+        return nil
     }
 }

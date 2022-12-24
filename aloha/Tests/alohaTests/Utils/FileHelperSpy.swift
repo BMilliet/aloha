@@ -52,4 +52,12 @@ struct FileHelperSpy: FileHelper {
     func copy(from: String, to: String) {
         //
     }
+
+    func move(from: String, to: String) {
+        //
+    }
+
+    func write(content: String, path: String) {
+        //
+    }
 }

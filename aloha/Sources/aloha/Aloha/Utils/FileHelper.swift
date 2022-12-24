@@ -12,6 +12,8 @@ protocol FileHelper {
     func createDir(_ file: String, withIntermediateDirectories: Bool) -> Bool
     func readFile(_ path: String) -> String?
     func copy(from: String, to: String)
+    func move(from: String, to: String)
+    func write(content: String, path: String)
 }
 
 struct FileHelperImpl: FileHelper {
@@ -37,7 +39,6 @@ struct FileHelperImpl: FileHelper {
         return try? fileManager.contentsOfDirectory(atPath: path)
     }
 
-    // list abs paths TODO
     func listAbsolute(_ path: String) -> [URL] {
         var content = [URL]()
 
@@ -77,5 +78,17 @@ struct FileHelperImpl: FileHelper {
 
     func currentDir() -> String {
         return fileManager.currentDirectoryPath
+    }
+
+    func move(from: String, to: String) {
+        try? fileManager.moveItem(atPath: from, toPath: to)
+    }
+
+    func write(content: String, path: String) {
+        do {
+            try content.write(toFile: path, atomically: true, encoding: .utf8)
+        } catch {
+            print(error.localizedDescription)
+        }
     }
 }
