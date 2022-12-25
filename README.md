@@ -3,7 +3,7 @@
 🏝️ Generic template generator
 
 Aloha is a Command line tool focuses on speed-up boring tasks such as creating bureaucratic architecture files structures.
-It follows templates provided by the user and apply then at the designated path renaming file and content if needed.
+It follows templates provided by the user and apply then at the designated path renaming files and content if needed.
 
 ## How to run:
 
