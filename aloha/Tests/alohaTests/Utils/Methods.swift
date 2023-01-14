@@ -6,6 +6,7 @@ enum Methods {
          fileHelperReadFileCalled(path: String),
          fileHelperIsDirCalled(path: String),
          fileHelperCurrentDirCalled,
+         fileHelperCurrentDirNameCalled,
          fileHelperCopy(from: String, to: String),
          fileHelperMove(from: String, to: String),
          fileHelperWrite(content: String, path: String)

@@ -32,6 +32,11 @@ struct GenerateTemplateUseCase {
                                         originAbs: "\(templatesDir)/\(template)",
                                         destAbs: fileManager.currentDir())
 
+        if !isInCorrectDir(control: templateModel) {
+            ui.error("Current dir is not the correct dir to generate this template")
+            return
+        }
+
         templateModel?.targets.forEach {
             copyAndRename($0, templatesDir)
         }
@@ -116,6 +121,13 @@ struct GenerateTemplateUseCase {
         return nil
     }
 
+    private func isInCorrectDir(control: TemplateControl?) -> Bool {
+        guard let templateExpectedDir = control?.currentDir else {
+            return false
+        }
+        return fileManager.currentDirName() == templateExpectedDir
+    }
+
     private func convertToAbsolutePaths(_ control: TemplateControl,
                                         originAbs: String,
                                         destAbs: String) -> TemplateControl {
@@ -125,6 +137,7 @@ struct GenerateTemplateUseCase {
                         destination: "\(destAbs)/\($0.destination)")
         }
 
-        return TemplateControl(targets: item)
+        return TemplateControl(currentDir: control.currentDir,
+                               targets: item)
     }
 }

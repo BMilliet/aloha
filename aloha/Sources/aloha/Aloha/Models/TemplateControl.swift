@@ -1,4 +1,5 @@
 struct TemplateControl: Decodable {
+    let currentDir: String
     let targets: [ItemControl]
 }
 

@@ -3,6 +3,7 @@ import Foundation
 enum ControlMock {
     static let json1 = """
                         {
+                            "currentDir": "ProjectDir",
                             "targets": [
                                 {
                                   "model": "__name__ExampleDir",

@@ -24,6 +24,7 @@ final class GenerateTemplateUseCaseTests: XCTestCase {
 
         fileHelper.createDirReturn = false
         fileHelper.currentDirReturn = "CurrentDirPath"
+        fileHelper.currentDirNameReturn = "ProjectDir"
         fileHelper.homePathReturn = "mock/path/"
         fileHelper.listReturn = listReturn
         fileHelper.existReturn = existingFiles
@@ -43,6 +44,7 @@ final class GenerateTemplateUseCaseTests: XCTestCase {
             .fileHelperListCalled(path: "mock/path/.aloha/templates"),
             .fileHelperCurrentDirCalled,
             .fileHelperReadFileCalled(path: "mock/path/.aloha/templates/template1/control.json"),
+            .fileHelperCurrentDirNameCalled,
 
             .fileHelperCopy(from: "mock/path/.aloha/templates/template1/__name__ExampleDir",
                             to: "CurrentDirPath/SomeProject/__name__ExampleDir"),
@@ -66,6 +68,53 @@ final class GenerateTemplateUseCaseTests: XCTestCase {
             .fileHelperReadFileCalled(path: "CurrentDirPath/SomeProject/alohaCoordinator.swift"),
             .fileHelperWrite(content: "final class alohaCoordinator {}",
                              path: "CurrentDirPath/SomeProject/alohaCoordinator.swift")
+        ]
+
+        XCTAssertEqual(methodsCalled.called, expected)
+    }
+
+    func testUserIsNotInTheCorrectDir() throws {
+        let methodsCalled = MethodsCalled()
+
+        var fileHelper = FileHelperSpy(methods: methodsCalled)
+        let ui = UISpy()
+
+        let existingFiles = ["mock/path/.aloha/templates": true]
+
+        var isDirFiles = ["CurrentDirPath/SomeProject/alohaExampleDir": true]
+        isDirFiles["CurrentDirPath/SomeProject/Package.swift"] = false
+        isDirFiles["CurrentDirPath/SomeProject/alohaCoordinator.swift"] = false
+
+        var listReturn: [String: [String]] = ["mock/path/.aloha/templates": ["template1"]]
+        listReturn["CurrentDirPath/SomeProject/alohaExampleDir"] = []
+
+        var fileRead: [String: String] = ["mock/path/.aloha/templates/template1/control.json": ControlMock.json1]
+        fileRead["CurrentDirPath/SomeProject/Package.swift"] = "nothing todo here"
+        fileRead["CurrentDirPath/SomeProject/alohaCoordinator.swift"] = "final class __name__Coordinator {}"
+
+        fileHelper.createDirReturn = false
+        fileHelper.currentDirReturn = "CurrentDirPath"
+        fileHelper.currentDirNameReturn = "AnotherProjectDir"
+        fileHelper.homePathReturn = "mock/path/"
+        fileHelper.listReturn = listReturn
+        fileHelper.existReturn = existingFiles
+        fileHelper.isDirReturn = isDirFiles
+        fileHelper.fileToRead = fileRead
+
+        GenerateTemplateUseCase(
+            fileManager: fileHelper,
+            ui: ui,
+            template: "template1",
+            name: "aloha"
+        ).start()
+
+        let expected: [Methods] = [
+            .fileHelperHomePathCalled,
+            .fileHelperExistCalled(path: "mock/path/.aloha/templates"),
+            .fileHelperListCalled(path: "mock/path/.aloha/templates"),
+            .fileHelperCurrentDirCalled,
+            .fileHelperReadFileCalled(path: "mock/path/.aloha/templates/template1/control.json"),
+            .fileHelperCurrentDirNameCalled
         ]
 
         XCTAssertEqual(methodsCalled.called, expected)
