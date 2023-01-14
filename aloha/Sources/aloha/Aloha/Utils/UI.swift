@@ -12,7 +12,7 @@ struct UIImpl: UI {
     }
 
     func error(_ text: String) {
-        print(text)
+        print("❌ \(text)")
     }
 
     func debug(_ text: String) {
