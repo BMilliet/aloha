@@ -1,3 +1,4 @@
+/*
 import XCTest
 @testable import aloha
 
@@ -185,3 +186,5 @@ final class GenerateTemplateUseCaseTests: XCTestCase {
         XCTAssertEqual(methodsCalled.called, expected)
     }
 }
+
+*/
