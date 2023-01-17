@@ -15,7 +15,7 @@ final class TemplateUseCaseTests: XCTestCase {
 
         TemplateUseCaseImpl(fileManager: fileHelper).createTemplateDir()
 
-        XCTAssertEqual(methodsCalled.called, expected)
+        TestHelper.compareEnums(expected: expected, called: methodsCalled.called)
     }
 
     func testTemplatesDir() throws {
@@ -29,8 +29,8 @@ final class TemplateUseCaseTests: XCTestCase {
 
         let sut = TemplateUseCaseImpl(fileManager: fileHelper).templatesDir()
 
-        XCTAssertEqual(methodsCalled.called, expected)
         XCTAssertEqual(sut, "AlohaHome/.aloha/templates")
+        TestHelper.compareEnums(expected: expected, called: methodsCalled.called)
     }
 
     func testUserHaveTemplateDirSuccess() throws {
@@ -46,7 +46,7 @@ final class TemplateUseCaseTests: XCTestCase {
         fileHelper.existReturn = ["AlohaHome/.aloha/templates": true]
 
         XCTAssertTrue(TemplateUseCaseImpl(fileManager: fileHelper).userHaveTemplateDir())
-        XCTAssertEqual(methodsCalled.called, expected)
+        TestHelper.compareEnums(expected: expected, called: methodsCalled.called)
     }
 
     func testUserHaveTemplateDirFailure() throws {
@@ -62,7 +62,7 @@ final class TemplateUseCaseTests: XCTestCase {
         fileHelper.existReturn = ["AlohaHome/.aloha/templates": false]
 
         XCTAssertFalse(TemplateUseCaseImpl(fileManager: fileHelper).userHaveTemplateDir())
-        XCTAssertEqual(methodsCalled.called, expected)
+        TestHelper.compareEnums(expected: expected, called: methodsCalled.called)
     }
 
     func testIsValidTemplateName() throws {
@@ -97,8 +97,8 @@ final class TemplateUseCaseTests: XCTestCase {
 
         let sut = TemplateUseCaseImpl(fileManager: fileHelper).getTemplate("template1")
 
-        XCTAssertEqual(methodsCalled.called, expected)
         XCTAssertNotNil(sut)
+        TestHelper.compareEnums(expected: expected, called: methodsCalled.called)
     }
 
     func testReadTemplate() throws {
@@ -118,7 +118,7 @@ final class TemplateUseCaseTests: XCTestCase {
 
         let sut = TemplateUseCaseImpl(fileManager: fileHelper).readTemplate("template1")
 
-        XCTAssertEqual(methodsCalled.called, expected)
         XCTAssertNotNil(sut)
+        TestHelper.compareEnums(expected: expected, called: methodsCalled.called)
     }
 }
