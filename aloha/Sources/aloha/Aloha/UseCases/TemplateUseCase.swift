@@ -49,7 +49,10 @@ struct TemplateUseCaseImpl: TemplateUseCaseProtocol {
 
     private func findTemplatePath(_ name: String) -> String? {
         guard let files = fileManager.list(templatesDir()) else { return nil }
-        return files.first { $0 == name }
+        let template = files.first { $0 == name }
+
+        guard let template = template else { return nil }
+        return "\(templatesDir())/\(template)"
     }
 
     private func convertToAbsolutePaths(_ control: TemplateControl,

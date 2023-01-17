@@ -1,13 +1,6 @@
 import XCTest
 @testable import aloha
 
-//func createTemplateDir()
-//func templatesDir() -> String
-//func userHaveTemplateDir() -> Bool
-//func isValidTemplateName(_ name: String) -> Bool
-//func getTemplate(_ name: String) -> TemplateControl?
-//func readTemplate(_ name: String) -> TemplateControl?
-
 final class TemplateUseCaseTests: XCTestCase {
 
     func testCreateTemplateDir() throws {
@@ -88,19 +81,44 @@ final class TemplateUseCaseTests: XCTestCase {
     func testGetTemplate() throws {
         let methodsCalled = MethodsCalled()
 
-        let fileHelper = FileHelperSpy(methods: methodsCalled)
+        var fileHelper = FileHelperSpy(methods: methodsCalled)
+
+        fileHelper.listReturn = ["AlohaHome/.aloha/templates": ["template1"]]
+        fileHelper.fileToRead  = ["AlohaHome/.aloha/templates/template1/control.json": ControlMock.json1]
 
         let expected: [Methods] = [
             .fileHelperHomePathCalled,
-            .fileHelperCreateDirCalled(path: "AlohaHome/.aloha/templates", withIntermediateDirectories: true)
+            .fileHelperListCalled(path: "AlohaHome/.aloha/templates"),
+            .fileHelperHomePathCalled,
+            .fileHelperReadFileCalled(path: "AlohaHome/.aloha/templates/template1/control.json"),
+            .fileHelperHomePathCalled,
+            .fileHelperCurrentDirCalled
         ]
 
         let sut = TemplateUseCaseImpl(fileManager: fileHelper).getTemplate("template1")
 
         XCTAssertEqual(methodsCalled.called, expected)
+        XCTAssertNotNil(sut)
     }
 
     func testReadTemplate() throws {
-        
+        let methodsCalled = MethodsCalled()
+
+        var fileHelper = FileHelperSpy(methods: methodsCalled)
+
+        fileHelper.listReturn = ["AlohaHome/.aloha/templates": ["template1"]]
+        fileHelper.fileToRead  = ["AlohaHome/.aloha/templates/template1/control.json": ControlMock.json1]
+
+        let expected: [Methods] = [
+            .fileHelperHomePathCalled,
+            .fileHelperListCalled(path: "AlohaHome/.aloha/templates"),
+            .fileHelperHomePathCalled,
+            .fileHelperReadFileCalled(path: "AlohaHome/.aloha/templates/template1/control.json"),
+        ]
+
+        let sut = TemplateUseCaseImpl(fileManager: fileHelper).readTemplate("template1")
+
+        XCTAssertEqual(methodsCalled.called, expected)
+        XCTAssertNotNil(sut)
     }
 }
