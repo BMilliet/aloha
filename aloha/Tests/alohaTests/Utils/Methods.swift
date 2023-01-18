@@ -1,3 +1,5 @@
+@testable import aloha
+
 enum Methods {
     case fileHelperHomePathCalled,
          fileHelperExistCalled(path: String),
@@ -8,9 +10,17 @@ enum Methods {
          fileHelperCurrentDirCalled,
          fileHelperCopy(from: String, to: String),
          fileHelperMove(from: String, to: String),
-         fileHelperWrite(content: String, path: String)
+         fileHelperWrite(content: String, path: String),
+
+         generateCreateTemplateCalled(name: String, templatesDir: String),
+
+         templateTemplatesDirCalled,
+         templateUserHaveTemplateDirCalled,
+         templateIsValidTemplateNameCalled(_ name: String),
+         templateGetTemplateCalled(_ name: String),
+         templateListTemplatesCalled,
+         templateCreateAlohaCalled
 }
 
 extension Methods: Equatable {
-    
 }
