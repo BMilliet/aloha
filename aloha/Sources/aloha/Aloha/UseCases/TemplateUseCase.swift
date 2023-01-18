@@ -3,10 +3,22 @@ protocol TemplateUseCaseProtocol {
     func userHaveTemplateDir() -> Bool
     func isValidTemplateName(_ name: String) -> Bool
     func getTemplate(_ name: String) -> TemplateControl?
+    func listTemplates() -> [String]
+    func createAloha()
 }
 
 struct TemplateUseCaseImpl: TemplateUseCaseProtocol {
+
     let fileManager: FileHelper
+
+    func createAloha() {
+        fileManager.createDir(Constants.templateDir, withIntermediateDirectories: true)
+    }
+
+    func listTemplates() -> [String] {
+        let templatesDir = Constants.templateDir
+        return fileManager.list(templatesDir) ?? [String]()
+    }
 
     func isValidTemplateName(_ name: String) -> Bool {
         return !name.isEmpty &&
@@ -43,7 +55,7 @@ struct TemplateUseCaseImpl: TemplateUseCaseProtocol {
     // MARK: - Private methods
 
     private func findTemplatePath(_ name: String) -> String? {
-        guard let files = fileManager.list(templatesDir()) else { return nil }
+        let files = listTemplates()
         let template = files.first { $0 == name }
 
         guard let template = template else { return nil }

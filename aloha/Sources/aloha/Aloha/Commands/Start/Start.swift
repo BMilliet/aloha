@@ -2,11 +2,11 @@ import ArgumentParser
 
 extension Runner {
 
-    struct List: ParsableCommand {
-        static let configuration = CommandConfiguration(abstract: "List available templates.")
+    struct Start: ParsableCommand {
+        static let configuration = CommandConfiguration(abstract: "Start aloha templates for current dir.")
 
         func run() throws {
-            ListController(
+            StartController(
                 ui: UIImpl(),
                 templateUseCase: TemplateUseCaseImpl(fileManager: FileHelperImpl())
             )

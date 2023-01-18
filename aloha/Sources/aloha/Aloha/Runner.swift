@@ -7,7 +7,8 @@ struct Runner: ParsableCommand {
         version: "1.0.0",
         subcommands: [
             Generate.self,
-            List.self
+            List.self,
+            Start.self
         ]
     )
 }

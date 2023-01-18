@@ -16,8 +16,8 @@ struct GenerateController {
         }
 
         if !templateUseCase.userHaveTemplateDir() {
-            ui.error("No templates dir found\nCreating templates dir...")
-            ui.message("Run the command \"init\" to create it.")
+            ui.error("No templates dir found")
+            ui.message("Run the command \"start\" to create it.")
             return
         }
 
