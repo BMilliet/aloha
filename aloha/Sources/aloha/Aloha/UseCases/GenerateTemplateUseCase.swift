@@ -1,18 +1,12 @@
 import Foundation
 
 protocol GenerateTemplateUseCaseProtocol {
-    func isInCorrectDir(control: TemplateControl?) -> Bool
     func createContent(name: String, template: TemplateControl, templatesDir: String)
 }
 
 struct GenerateTemplateUseCaseImpl: GenerateTemplateUseCaseProtocol {
 
     let fileManager: FileHelper
-
-    func isInCorrectDir(control: TemplateControl?) -> Bool {
-        guard let templateExpectedDir = control?.currentDir else { return false }
-        return fileManager.currentDirName() == templateExpectedDir
-    }
 
     func createContent(name: String, template: TemplateControl, templatesDir: String) {
         template.targets.forEach {

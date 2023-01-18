@@ -3,33 +3,17 @@ import XCTest
 
 final class TemplateUseCaseTests: XCTestCase {
 
-    func testCreateTemplateDir() throws {
-        let methodsCalled = MethodsCalled()
-
-        let fileHelper = FileHelperSpy(methods: methodsCalled)
-
-        let expected: [Methods] = [
-            .fileHelperHomePathCalled,
-            .fileHelperCreateDirCalled(path: "AlohaHome/.aloha/templates", withIntermediateDirectories: true)
-        ]
-
-        TemplateUseCaseImpl(fileManager: fileHelper).createTemplateDir()
-
-        TestHelper.compareEnums(expected: expected, called: methodsCalled.called)
-    }
-
     func testTemplatesDir() throws {
         let methodsCalled = MethodsCalled()
 
         let fileHelper = FileHelperSpy(methods: methodsCalled)
 
         let expected: [Methods] = [
-            .fileHelperHomePathCalled,
         ]
 
         let sut = TemplateUseCaseImpl(fileManager: fileHelper).templatesDir()
 
-        XCTAssertEqual(sut, "AlohaHome/.aloha/templates")
+        XCTAssertEqual(sut, "Aloha/templates")
         TestHelper.compareEnums(expected: expected, called: methodsCalled.called)
     }
 
@@ -39,11 +23,10 @@ final class TemplateUseCaseTests: XCTestCase {
         var fileHelper = FileHelperSpy(methods: methodsCalled)
 
         let expected: [Methods] = [
-            .fileHelperHomePathCalled,
-            .fileHelperExistCalled(path: "AlohaHome/.aloha/templates")
+            .fileHelperExistCalled(path: "Aloha/templates")
         ]
 
-        fileHelper.existReturn = ["AlohaHome/.aloha/templates": true]
+        fileHelper.existReturn = ["Aloha/templates": true]
 
         XCTAssertTrue(TemplateUseCaseImpl(fileManager: fileHelper).userHaveTemplateDir())
         TestHelper.compareEnums(expected: expected, called: methodsCalled.called)
@@ -55,11 +38,10 @@ final class TemplateUseCaseTests: XCTestCase {
         var fileHelper = FileHelperSpy(methods: methodsCalled)
 
         let expected: [Methods] = [
-            .fileHelperHomePathCalled,
-            .fileHelperExistCalled(path: "AlohaHome/.aloha/templates")
+            .fileHelperExistCalled(path: "Aloha/templates")
         ]
 
-        fileHelper.existReturn = ["AlohaHome/.aloha/templates": false]
+        fileHelper.existReturn = ["Aloha/templates": false]
 
         XCTAssertFalse(TemplateUseCaseImpl(fileManager: fileHelper).userHaveTemplateDir())
         TestHelper.compareEnums(expected: expected, called: methodsCalled.called)
@@ -83,40 +65,15 @@ final class TemplateUseCaseTests: XCTestCase {
 
         var fileHelper = FileHelperSpy(methods: methodsCalled)
 
-        fileHelper.listReturn = ["AlohaHome/.aloha/templates": ["template1"]]
-        fileHelper.fileToRead  = ["AlohaHome/.aloha/templates/template1/control.json": ControlMock.json1]
+        fileHelper.listReturn = ["Aloha/templates": ["template1"]]
+        fileHelper.fileToRead  = ["Aloha/templates/template1/control.json": ControlMock.json1]
 
         let expected: [Methods] = [
-            .fileHelperHomePathCalled,
-            .fileHelperListCalled(path: "AlohaHome/.aloha/templates"),
-            .fileHelperHomePathCalled,
-            .fileHelperReadFileCalled(path: "AlohaHome/.aloha/templates/template1/control.json"),
-            .fileHelperHomePathCalled,
-            .fileHelperCurrentDirCalled
+            .fileHelperListCalled(path: "Aloha/templates"),
+            .fileHelperReadFileCalled(path: "Aloha/templates/template1/control.json"),
         ]
 
         let sut = TemplateUseCaseImpl(fileManager: fileHelper).getTemplate("template1")
-
-        XCTAssertNotNil(sut)
-        TestHelper.compareEnums(expected: expected, called: methodsCalled.called)
-    }
-
-    func testReadTemplate() throws {
-        let methodsCalled = MethodsCalled()
-
-        var fileHelper = FileHelperSpy(methods: methodsCalled)
-
-        fileHelper.listReturn = ["AlohaHome/.aloha/templates": ["template1"]]
-        fileHelper.fileToRead  = ["AlohaHome/.aloha/templates/template1/control.json": ControlMock.json1]
-
-        let expected: [Methods] = [
-            .fileHelperHomePathCalled,
-            .fileHelperListCalled(path: "AlohaHome/.aloha/templates"),
-            .fileHelperHomePathCalled,
-            .fileHelperReadFileCalled(path: "AlohaHome/.aloha/templates/template1/control.json"),
-        ]
-
-        let sut = TemplateUseCaseImpl(fileManager: fileHelper).readTemplate("template1")
 
         XCTAssertNotNil(sut)
         TestHelper.compareEnums(expected: expected, called: methodsCalled.called)

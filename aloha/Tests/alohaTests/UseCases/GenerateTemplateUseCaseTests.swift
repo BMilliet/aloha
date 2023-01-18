@@ -3,36 +3,6 @@ import XCTest
 
 final class GenerateTemplateUseCaseTests: XCTestCase {
 
-    func testIsInCorrectDirSuccess() throws {
-        let methodsCalled = MethodsCalled()
-
-        var fileHelper = FileHelperSpy(methods: methodsCalled)
-
-        fileHelper.currentDirNameReturn = "ProjectDir"
-
-        let expected: [Methods] = [
-            .fileHelperCurrentDirNameCalled
-        ]
-
-        XCTAssertTrue(GenerateTemplateUseCaseImpl(fileManager: fileHelper).isInCorrectDir(control: ControlHelper.getControl1()))
-        TestHelper.compareEnums(expected: expected, called: methodsCalled.called)
-    }
-
-    func testIsInCorrectDirFailure() throws {
-        let methodsCalled = MethodsCalled()
-
-        var fileHelper = FileHelperSpy(methods: methodsCalled)
-
-        fileHelper.currentDirNameReturn = "ProjectDir2"
-
-        let expected: [Methods] = [
-            .fileHelperCurrentDirNameCalled
-        ]
-
-        XCTAssertFalse(GenerateTemplateUseCaseImpl(fileManager: fileHelper).isInCorrectDir(control: ControlHelper.getControl1()))
-        TestHelper.compareEnums(expected: expected, called: methodsCalled.called)
-    }
-
     func testCreateContent() throws {
         let methodsCalled = MethodsCalled()
 

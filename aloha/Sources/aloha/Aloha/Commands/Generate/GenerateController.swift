@@ -17,18 +17,13 @@ struct GenerateController {
 
         if !templateUseCase.userHaveTemplateDir() {
             ui.error("No templates dir found\nCreating templates dir...")
-            ui.message("Run the command \"setup\" to create it.")
+            ui.message("Run the command \"init\" to create it.")
             return
         }
 
         guard let templateModel = templateUseCase.getTemplate(template) else {
             ui.error("Could not find template or template is invalid")
             ui.message("Run the command \"list\" to check if template exists, if it does, check the control file with command check")
-            return
-        }
-
-        if !generateUseCase.isInCorrectDir(control: templateModel) {
-            ui.error("Current dir is not the correct dir to generate this template")
             return
         }
 

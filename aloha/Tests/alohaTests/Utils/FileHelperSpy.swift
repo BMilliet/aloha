@@ -5,8 +5,7 @@ import XCTest
 
 struct FileHelperSpy: FileHelper {
 
-    var currentDirReturn = "somePath/Aloha"
-    var currentDirNameReturn = "Aloha"
+    var currentDirReturn = "AlohaHome"
     var createDirReturn = false
     var homePathReturn = "AlohaHome/"
     var existReturn: [String: Bool] = [String: Bool]()
@@ -19,11 +18,6 @@ struct FileHelperSpy: FileHelper {
     func currentDir() -> String {
         methods.add(.fileHelperCurrentDirCalled)
         return currentDirReturn
-    }
-
-    func currentDirName() -> String {
-        methods.add(.fileHelperCurrentDirNameCalled)
-        return currentDirNameReturn
     }
 
     func copy(from: String, to: String) {

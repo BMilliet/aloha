@@ -9,7 +9,7 @@ struct ListUseCase {
         let templates = getTemplates()
 
         if templates.isEmpty {
-            ui.message("🏝️ No templates available.")
+            ui.message("🌱 No templates available here.")
         } else {
             ui.message("🌴 Available templates:")
             templates.forEach { ui.message(" - \($0)") }
@@ -17,8 +17,7 @@ struct ListUseCase {
     }
 
     private func getTemplates() -> [String] {
-        let home = fileManager.homePath()
-        let templatesDir = home + Constants.templateDir
+        let templatesDir = Constants.templateDir
         return fileManager.list(templatesDir) ?? [String]()
     }
 }

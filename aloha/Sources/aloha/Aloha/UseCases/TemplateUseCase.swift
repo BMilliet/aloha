@@ -1,10 +1,8 @@
 protocol TemplateUseCaseProtocol {
-    func createTemplateDir()
     func templatesDir() -> String
     func userHaveTemplateDir() -> Bool
     func isValidTemplateName(_ name: String) -> Bool
     func getTemplate(_ name: String) -> TemplateControl?
-    func readTemplate(_ name: String) -> TemplateControl?
 }
 
 struct TemplateUseCaseImpl: TemplateUseCaseProtocol {
@@ -16,33 +14,30 @@ struct TemplateUseCaseImpl: TemplateUseCaseProtocol {
         !name.contains(".")
     }
 
-    func createTemplateDir() {
-        fileManager.createDir(templatesDir(), withIntermediateDirectories: true)
-    }
-
     func userHaveTemplateDir() -> Bool {
         return fileManager.exist(templatesDir())
     }
 
     func templatesDir() -> String {
-        return fileManager.homePath() + Constants.templateDir
+        return Constants.templateDir
     }
 
-    func readTemplate(_ name: String) -> TemplateControl? {
+    func getTemplate(_ name: String) -> TemplateControl? {
         guard let path = findTemplatePath(name) else { return nil }
         guard let data = fileManager.readFile("\(path)/\(Constants.control)")?.data(using: .utf8) else {
             return nil
         }
 
-        return JsonHelper.decode(type: TemplateControl.self, data)
-    }
+        guard let rawTemplate = JsonHelper.decode(type: TemplateControl.self, data) else {
+            return nil
+        }
 
-    func getTemplate(_ name: String) -> TemplateControl? {
-        guard let template = readTemplate(name) else { return nil }
+        let item = rawTemplate.targets.map {
+            ItemControl(model: "\(path)/\($0.model)",
+                        destination: $0.destination)
+        }
 
-        let origin = "\(templatesDir())/\(name)"
-        let output = fileManager.currentDir()
-        return convertToAbsolutePaths(template, originAbs: origin, destAbs: output)
+        return TemplateControl(targets: item)
     }
 
     // MARK: - Private methods
@@ -53,18 +48,5 @@ struct TemplateUseCaseImpl: TemplateUseCaseProtocol {
 
         guard let template = template else { return nil }
         return "\(templatesDir())/\(template)"
-    }
-
-    private func convertToAbsolutePaths(_ control: TemplateControl,
-                                        originAbs: String,
-                                        destAbs: String) -> TemplateControl {
-
-        let item = control.targets.map {
-            ItemControl(model: "\(originAbs)/\($0.model)",
-                        destination: "\(destAbs)/\($0.destination)")
-        }
-
-        return TemplateControl(currentDir: control.currentDir,
-                               targets: item)
     }
 }

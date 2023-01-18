@@ -1,9 +1,8 @@
 struct TemplateControl: Decodable {
-    let currentDir: String
-    let targets: [ItemControl]
+    var targets: [ItemControl]
 }
 
 struct ItemControl: Decodable {
-    let model: String
-    let destination: String
+    var model: String
+    var destination: String
 }
