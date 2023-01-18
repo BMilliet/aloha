@@ -6,7 +6,6 @@ protocol FileHelper {
     func list(_ path: String) -> [String]?
     func isDir(_ path: String) -> Bool?
     func currentDir() -> String
-    func currentDirName() -> String
 
     @discardableResult
     func createDir(_ file: String, withIntermediateDirectories: Bool) -> Bool
@@ -65,11 +64,6 @@ struct FileHelperImpl: FileHelper {
 
     func currentDir() -> String {
         return fileManager.currentDirectoryPath
-    }
-
-    func currentDirName() -> String {
-        let name = fileManager.currentDirectoryPath.split(separator: "/").last
-        return String(name ?? "")
     }
 
     func move(from: String, to: String) {

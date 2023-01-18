@@ -12,11 +12,12 @@ extension Runner {
         var name: String
 
         func run() throws {
-            GenerateTemplateUseCase(
-                fileManager: FileHelperImpl(),
-                ui: UIImpl(),
+            GenerateController(
+                name: name,
                 template: template,
-                name: name
+                ui: UIImpl(),
+                templateUseCase: TemplateUseCaseImpl(fileManager: FileHelperImpl()),
+                generateUseCase: GenerateTemplateUseCaseImpl(fileManager: FileHelperImpl())
             )
             .start()
         }
