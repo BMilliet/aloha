@@ -4,7 +4,7 @@ protocol FileHelper {
     func homePath() -> String
     func exist(_ file: String) -> Bool
     func list(_ path: String) -> [String]?
-    func isDir(_ path: String) -> Bool?
+    func isDir(_ path: String) -> Bool
     func currentDir() -> String
 
     @discardableResult
@@ -16,18 +16,19 @@ protocol FileHelper {
 }
 
 struct FileHelperImpl: FileHelper {
+
+    private let fileManager = FileManager.default
+
     func copy(from: String, to: String) {
         do {
             try fileManager.copyItem(atPath: from, toPath: to)
         } catch {
-            print("error => \(error.localizedDescription)")
+            print(error)
         }
     }
-    
-    private let fileManager = FileManager.default
 
     func homePath() -> String {
-        fileManager.homeDirectoryForCurrentUser.path()
+        fileManager.homeDirectoryForCurrentUser.relativePath
     }
 
     func exist(_ file: String) -> Bool {
@@ -41,25 +42,29 @@ struct FileHelperImpl: FileHelper {
     func createDir(_ file: String, withIntermediateDirectories: Bool = false) -> Bool {
         do {
             try fileManager.createDirectory(
-                at: URL(filePath: file),
+                atPath: file,
                 withIntermediateDirectories: withIntermediateDirectories)
             return true
         } catch {
+            print(error)
             return false
         }
     }
 
     func readFile(_ path: String) -> String? {
-        return try? String(contentsOfFile: path, encoding: .utf8)
+        var content: String?
+        do {
+            content = try String(contentsOfFile: path, encoding: .utf8)
+        } catch {
+            print(error)
+        }
+        return content
     }
 
-    func isDir(_ path: String) -> Bool? {
-        let url = URL(filePath: path)
-        guard let file = try? url.resourceValues(forKeys: [.isDirectoryKey]) else {
-            return nil
-        }
-
-        return file.isDirectory
+    func isDir(_ path: String) -> Bool {
+        var isDir: ObjCBool = false
+        fileManager.fileExists(atPath: path, isDirectory: &isDir)
+        return isDir.boolValue
     }
 
     func currentDir() -> String {
@@ -74,7 +79,7 @@ struct FileHelperImpl: FileHelper {
         do {
             try content.write(toFile: path, atomically: true, encoding: .utf8)
         } catch {
-            print(error.localizedDescription)
+            print(error)
         }
     }
 }

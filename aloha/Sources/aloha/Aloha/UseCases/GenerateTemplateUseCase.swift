@@ -17,8 +17,8 @@ struct GenerateTemplateUseCaseImpl: GenerateTemplateUseCaseProtocol {
     // MARK: - Private methods
 
     private func copyAndRename(_ item: ItemControl, _ templatesDir: String, _ name: String) {
-        let fileName = URL(filePath: item.model).lastPathComponent
-        let destination = "\(item.destination)/\(fileName)"
+        guard let fileName = item.model.split(separator: "/").last else { return }
+        let destination = "\(item.destination)/" + fileName
         fileManager.copy(from: item.model, to: destination)
         renameContent(destination, name: name)
     }
@@ -35,11 +35,7 @@ struct GenerateTemplateUseCaseImpl: GenerateTemplateUseCaseProtocol {
             fileManager.move(from: file, to: filePath)
         }
 
-        guard let isDir = fileManager.isDir(filePath) else {
-            return
-        }
-
-        if isDir {
+        if fileManager.isDir(filePath) {
             fileManager.list(filePath)?.forEach {
                 renameContent("\(filePath)/\($0)", name: name)
             }

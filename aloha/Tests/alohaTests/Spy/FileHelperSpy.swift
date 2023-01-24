@@ -75,7 +75,7 @@ struct FileHelperSpy: FileHelper {
         return nil
     }
 
-    func isDir(_ path: String) -> Bool? {
+    func isDir(_ path: String) -> Bool {
         methods.add(.fileHelperIsDirCalled(path: path))
         do {
             return try XCTUnwrap(isDirReturn[path])
