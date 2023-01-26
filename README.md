@@ -14,12 +14,12 @@ It follows templates provided by the user and apply then at the designated path 
 ## How to create templates:
 
 - Run `aloha start` on your project directory to create the basic file structure. 
-- Create the templates at `Aloha/templates` each directory here is considered a different template.
+- Create the templates at `aloha/templates` each directory here is considered a different template.
 
 ## Template config:
 
-- Create a example template `mkdir Aloha/templates/my_example`
-- Now inside the `Aloha/templates/my_example` create a file `control.json`, this defines where each file or directory should be moved to.
+- Create a example template `mkdir aloha/templates/my_example`
+- Now inside the `aloha/templates/my_example` create a file `control.json`, this defines where each file or directory should be moved to.
 
 ## Templates
 
@@ -50,6 +50,6 @@ It follows templates provided by the user and apply then at the designated path 
 }
 ```
 
-The key `model` indicates where is the template file located, like `Aloha/templates/my_example/__name__ExampleDir` and the key `destination` is the path relative to where the file will be created.
-So in the first item `Aloha/templates/my_example/__name__ExampleDir` will be moved to `CurrentDir/SomeProject/__name__ExampleDir` (key word `__name__` will be renamed for the parameter `name`).
+The key `model` indicates where is the template file located, like `aloha/templates/my_example/__name__ExampleDir` and the key `destination` is the path relative to where the file will be created.
+So in the first item `aloha/templates/my_example/__name__ExampleDir` will be moved to `CurrentDir/SomeProject/__name__ExampleDir` (key word `__name__` will be renamed for the parameter `name`).
 
