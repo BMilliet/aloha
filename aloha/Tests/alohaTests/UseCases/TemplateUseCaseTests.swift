@@ -13,7 +13,7 @@ final class TemplateUseCaseTests: XCTestCase {
 
         let sut = TemplateUseCaseImpl(fileManager: fileHelper).templatesDir()
 
-        XCTAssertEqual(sut, "Aloha/templates")
+        XCTAssertEqual(sut, "aloha/templates")
         TestHelper.compareEnums(expected: expected, called: methodsCalled.called)
     }
 
@@ -23,10 +23,10 @@ final class TemplateUseCaseTests: XCTestCase {
         var fileHelper = FileHelperSpy(methods: methodsCalled)
 
         let expected: [Methods] = [
-            .fileHelperExistCalled(path: "Aloha/templates")
+            .fileHelperExistCalled(path: "aloha/templates")
         ]
 
-        fileHelper.existReturn = ["Aloha/templates": true]
+        fileHelper.existReturn = ["aloha/templates": true]
 
         XCTAssertTrue(TemplateUseCaseImpl(fileManager: fileHelper).userHaveTemplateDir())
         TestHelper.compareEnums(expected: expected, called: methodsCalled.called)
@@ -38,10 +38,10 @@ final class TemplateUseCaseTests: XCTestCase {
         var fileHelper = FileHelperSpy(methods: methodsCalled)
 
         let expected: [Methods] = [
-            .fileHelperExistCalled(path: "Aloha/templates")
+            .fileHelperExistCalled(path: "aloha/templates")
         ]
 
-        fileHelper.existReturn = ["Aloha/templates": false]
+        fileHelper.existReturn = ["aloha/templates": false]
 
         XCTAssertFalse(TemplateUseCaseImpl(fileManager: fileHelper).userHaveTemplateDir())
         TestHelper.compareEnums(expected: expected, called: methodsCalled.called)
@@ -65,12 +65,12 @@ final class TemplateUseCaseTests: XCTestCase {
 
         var fileHelper = FileHelperSpy(methods: methodsCalled)
 
-        fileHelper.listReturn = ["Aloha/templates": ["template1"]]
-        fileHelper.fileToRead  = ["Aloha/templates/template1/control.json": ControlMock.json1]
+        fileHelper.listReturn = ["aloha/templates": ["template1"]]
+        fileHelper.fileToRead  = ["aloha/templates/template1/control.json": ControlMock.json1]
 
         let expected: [Methods] = [
-            .fileHelperListCalled(path: "Aloha/templates"),
-            .fileHelperReadFileCalled(path: "Aloha/templates/template1/control.json"),
+            .fileHelperListCalled(path: "aloha/templates"),
+            .fileHelperReadFileCalled(path: "aloha/templates/template1/control.json"),
         ]
 
         let sut = TemplateUseCaseImpl(fileManager: fileHelper).getTemplate("template1")
