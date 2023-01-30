@@ -8,10 +8,10 @@ struct StartController {
 
     func start() {
         if templateUseCase.userHaveTemplateDir() {
-            ui.message("🏄‍♂️ Current dir already have Aloha config")
+            ui.message("🏄‍♂️ Current dir" + Colors.cyan + " already have aloha config.")
         } else {
             templateUseCase.createAloha()
-            ui.message("🌊 Created Aloha config on current dir")
+            ui.message(Colors.cyan + "🌊 Created aloha config " + Colors.reset + "on current dir.")
         }
     }
 }

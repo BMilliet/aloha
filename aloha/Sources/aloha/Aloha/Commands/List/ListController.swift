@@ -11,7 +11,7 @@ struct ListController {
         let templates = templateUseCase.listTemplates()
 
         if templates.isEmpty {
-            ui.message("🌱 No templates available here.")
+            ui.message(Colors.magenta + "🌱 No templates " + Colors.reset + "available here.")
         } else {
             ui.message("🌴 Available templates:")
             templates.forEach { ui.message(" - \($0)") }

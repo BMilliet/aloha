@@ -11,15 +11,15 @@ extension Runner {
         @Argument(help: "Name to replace in template.")
         var name: String
 
+        @Flag(name: .shortAndLong, help: "Verbose mode.")
+        var verbose = false
+
         func run() throws {
-            GenerateController(
-                name: name,
-                template: template,
-                ui: UIImpl(),
-                templateUseCase: TemplateUseCaseImpl(fileManager: FileHelperImpl()),
-                generateUseCase: GenerateTemplateUseCaseImpl(fileManager: FileHelperImpl())
-            )
-            .start()
+            GenerateFactory
+                .build(name: name,
+                       template: template,
+                       verbose: verbose)
+                .start()
         }
     }
 }

@@ -5,12 +5,13 @@ extension Runner {
     struct Start: ParsableCommand {
         static let configuration = CommandConfiguration(abstract: "Start aloha templates for current dir.")
 
+        @Flag(name: .shortAndLong, help: "Verbose mode.")
+        var verbose = false
+
         func run() throws {
-            StartController(
-                ui: UIImpl(),
-                templateUseCase: TemplateUseCaseImpl(fileManager: FileHelperImpl())
-            )
-            .start()
+            StartFactory
+                .build(verbose: verbose)
+                .start()
         }
     }
 }

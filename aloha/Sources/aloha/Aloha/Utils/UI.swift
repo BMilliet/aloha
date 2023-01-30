@@ -7,17 +7,24 @@ protocol UI {
 }
 
 struct UIImpl: UI {
+
+    private let verbose: Bool
+
+    init(verbose: Bool) {
+        self.verbose = verbose
+    }
+
     func message(_ text: String) {
-        print(text)
+        print(text + Colors.reset)
     }
 
     func error(_ text: String) {
-        print("❌ \(text)")
+        print("❌ \(text)" + Colors.reset)
     }
 
     func debug(_ text: String) {
-        if Constants.development {
-            print("[DEBUG]: \(text)")
+        if verbose {
+            print(text + Colors.reset)
         }
     }
 }

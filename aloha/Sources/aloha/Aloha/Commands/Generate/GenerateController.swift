@@ -31,6 +31,9 @@ struct GenerateController {
                                       template: templateModel,
                                       templatesDir: templateUseCase.templatesDir())
 
-        ui.message("🤙 Template \(template) generated with name \(name)")
+        ui.message("🤙 Template " +
+                   Colors.magenta + template +
+                   Colors.reset + " generated with name " +
+                   Colors.cyan + name)
     }
 }
