@@ -14,7 +14,7 @@ It follows templates provided by the user and apply then at the designated path 
 ## Run using docker:
 
 - build a image with aloha `docker build -t aloha:1.0 .`
-- run the contaier passing the command parameters `docker run --rm -v "$PWD":/home/user/app aloha:1.0 aloha`
+- run the contaier passing the command parameters `docker run --rm -v "$PWD":/home/user/proj aloha:1.0 aloha`
 
 ## How to create templates:
 
