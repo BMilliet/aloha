@@ -13,4 +13,6 @@ RUN apt update && \
 
 RUN make release
 
-CMD ["aloha/.build/release/aloha"]
+ENV PATH="${PATH}:/home/user/app/aloha/aloha/.build/release"
+
+CMD ["aloha"]
