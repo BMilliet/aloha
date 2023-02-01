@@ -29,12 +29,17 @@ It follows templates provided by the user and apply then at the designated path 
 ## Templates
 
 - The actual templates are created just like a file structure using directories and files.
-- The key word `__init__` indicates where the argument `name` should be replaced on file names and file content.
+- The key word `__name__` indicates where the argument `name` should be replaced on file names and file content.
 - example call name Aloha for `__name__ExampleDir` becomes `AlohaExampleDir`.
 
 ## Control.json
 
-- The structure of the `control.json` is:
+- `targets` the array of items with the targets indicating from which template model should be copied to.
+- `model` is where in local template that specific directory of file should be copied from.
+- `destination` is where the `model` template should be copied to and renamed with the parameter `name`.
+- `justCopy` is an array with the name of files or directories that should only be copied, their content wont be read.
+
+## Control.json example
 
 ```json
 {
@@ -51,10 +56,14 @@ It follows templates provided by the user and apply then at the designated path 
           "model": "__name__Coordinator.swift",
           "destination": "SomeProject"
         }
-    ]
+    ],
+    "justCopy": [
+      "project.xcworkspace",
+      "Assets.xcassets",
+      "Base.lproj",
+      "Info.plist",
+      ".gitignore"
+  ]
 }
 ```
-
-The key `model` indicates where is the template file located, like `aloha/templates/my_example/__name__ExampleDir` and the key `destination` is the path relative to where the file will be created.
-So in the first item `aloha/templates/my_example/__name__ExampleDir` will be moved to `CurrentDir/SomeProject/__name__ExampleDir` (key word `__name__` will be renamed for the parameter `name`).
 
