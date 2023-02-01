@@ -5,7 +5,7 @@ enum GenerateFactory {
         let fileManager = FileHelperImpl(ui: ui)
 
         let templateUseCase = TemplateUseCaseImpl(fileManager: fileManager)
-        let generateUseCase = GenerateTemplateUseCaseImpl(fileManager: fileManager)
+        let generateUseCase = GenerateTemplateUseCaseImpl(fileManager: fileManager, ui: ui)
 
         return GenerateController(name: name,
                                   template: template,

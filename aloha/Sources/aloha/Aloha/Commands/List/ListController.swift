@@ -14,7 +14,7 @@ struct ListController {
             ui.message(Colors.magenta + "🌱 No templates " + Colors.reset + "available here.")
         } else {
             ui.message("🌴 Available templates:")
-            templates.forEach { ui.message(" - \($0)") }
+            templates.forEach { ui.message(Colors.cyan + " - " + Colors.reset + $0) }
         }
     }
 }

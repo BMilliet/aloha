@@ -15,7 +15,16 @@ enum ControlMock {
                                 {
                                   "model": "__name__Coordinator.swift",
                                   "destination": "SomeProject"
+                                },
+                                {
+                                  "model": "JustCopyDir1",
+                                  "destination": "SomeProject"
                                 }
+                            ],
+                            "justCopy": [
+                                "JustCopyDir1",
+                                "JustCopyDir2",
+                                "JustCopyFile.swift"
                             ]
                         }
                         """

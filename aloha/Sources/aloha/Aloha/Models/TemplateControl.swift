@@ -1,5 +1,6 @@
 struct TemplateControl: Decodable {
     var targets: [ItemControl]
+    var justCopy: [String]?
 }
 
 struct ItemControl: Decodable {

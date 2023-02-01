@@ -11,9 +11,11 @@ final class GenerateTemplateUseCaseTests: XCTestCase {
         var isDirFiles = ["SomeProject/alohaExampleDir": true]
         isDirFiles["SomeProject/Package.swift"] = false
         isDirFiles["SomeProject/alohaCoordinator.swift"] = false
+        isDirFiles["SomeProject/JustCopyDir1"] = true
+        isDirFiles["SomeProject/JustCopyFile.swift"] = false
 
         isDirFiles["SomeProject/alohaExampleDir/alohaController.swift"] = false
-        fileHelper.listReturn = ["SomeProject/alohaExampleDir": ["__name__Controller.swift"]]
+        fileHelper.listReturn = ["SomeProject/alohaExampleDir": ["__name__Controller.swift", "JustCopyDir2", "JustCopyFile.swift"]]
 
         var filesToRead = ["SomeProject/Package.swift": "nothing to do here"]
         filesToRead["SomeProject/alohaCoordinator.swift"] = "final class __name__Coordinator {}"
@@ -52,9 +54,10 @@ final class GenerateTemplateUseCaseTests: XCTestCase {
             .fileHelperIsDirCalled(path: "SomeProject/alohaCoordinator.swift"),
             .fileHelperReadFileCalled(path: "SomeProject/alohaCoordinator.swift"),
             .fileHelperWrite(content: "final class alohaCoordinator {}", path: "SomeProject/alohaCoordinator.swift"),
+            .fileHelperCopy(from: "JustCopyDir1", to: "SomeProject/JustCopyDir1")
         ]
 
-        let useCase = GenerateTemplateUseCaseImpl(fileManager: fileHelper)
+        let useCase = GenerateTemplateUseCaseImpl(fileManager: fileHelper, ui: UISpy())
         useCase.createContent(name: "aloha", template: ControlHelper.getControl1(), templatesDir: "templates/path")
 
         TestHelper.compareEnums(expected: expected, called: methodsCalled.called)

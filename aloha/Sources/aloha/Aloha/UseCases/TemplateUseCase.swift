@@ -49,7 +49,7 @@ struct TemplateUseCaseImpl: TemplateUseCaseProtocol {
                         destination: $0.destination)
         }
 
-        return TemplateControl(targets: item)
+        return TemplateControl(targets: item, justCopy: rawTemplate.justCopy)
     }
 
     // MARK: - Private methods
