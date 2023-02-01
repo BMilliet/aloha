@@ -36,8 +36,8 @@ It follows templates provided by the user and apply then at the designated path 
 
 - `targets` the array of items with the targets indicating from which template model should be copied to.
 - `model` is where in local template that specific directory of file should be copied from.
-- `destination` is where the `model` template should be copied to and renamed with the parameter `name`.
-- `justCopy` is an array with the name of files or directories that should only be copied, their content wont be read.
+- `destination` is where the `model` template should be copied to, renamed with the parameter `name` and if it's a file the content will also be modified if it have `__name__` key word.
+- `justCopy` is an array with the name of files or directories that should only be copied, their content wont be modified.
 
 ## Control.json example
 
