@@ -10,8 +10,8 @@ struct GenerateController {
     func start() {
 
         if !templateUseCase.isValidTemplateName(template) {
-            ui.error("invalid template name " + Colors.magenta + template)
-            ui.error("avoid using dot and slash")
+            ui.error("Invalid template name " + Colors.magenta + template)
+            ui.error("Avoid using dot and slash")
             return
         }
 

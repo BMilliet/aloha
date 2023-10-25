@@ -11,7 +11,7 @@ struct StartController {
             ui.message("🏄‍♂️ Current dir" + Colors.cyan + " already have aloha config.")
         } else {
             templateUseCase.createAloha()
-            ui.message(Colors.cyan + "🌊 Created aloha config " + Colors.reset + "on current dir.")
+            ui.message(Colors.cyan + "🌊 Created aloha config " + Colors.reset + "on current project.")
         }
     }
 }

@@ -4,11 +4,12 @@ struct Runner: ParsableCommand {
     static let configuration = CommandConfiguration(
         commandName: "aloha",
         abstract: "Aloha 🏝️",
-        version: "1.2.0",
+        version: "0.0.2",
         subcommands: [
             Generate.self,
             List.self,
-            Start.self
+            Start.self,
+            TemplateMaker.self
         ]
     )
 }

@@ -4,6 +4,7 @@ protocol UI {
     func message(_ text: String)
     func error(_ text: String)
     func debug(_ text: String)
+    func userInput(_ message: String) -> String?
 }
 
 struct UIImpl: UI {
@@ -26,5 +27,14 @@ struct UIImpl: UI {
         if verbose {
             print(text + Colors.reset)
         }
+    }
+
+    func userInput(_ message: String = "") -> String? {
+        if !message.isEmpty {
+            self.message(message)
+        }
+
+        let value = readLine()
+        return value
     }
 }
