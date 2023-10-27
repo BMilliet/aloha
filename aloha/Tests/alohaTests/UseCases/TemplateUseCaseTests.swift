@@ -47,7 +47,7 @@ final class TemplateUseCaseTests: XCTestCase {
         TestHelper.compareEnums(expected: expected, called: methodsCalled.called)
     }
 
-    func test_IsValidTemplateName() throws {
+    func test_isValidTemplateName() throws {
         let methodsCalled = MethodsCalled()
         let fileHelper = FileHelperSpy(methods: methodsCalled)
 
