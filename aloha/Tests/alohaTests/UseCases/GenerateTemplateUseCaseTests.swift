@@ -3,7 +3,7 @@ import XCTest
 
 final class GenerateTemplateUseCaseTests: XCTestCase {
 
-    func testCreateContent() throws {
+    func test_create_content() throws {
         let methodsCalled = MethodsCalled()
 
         var fileHelper = FileHelperSpy(methods: methodsCalled)

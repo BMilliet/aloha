@@ -5,7 +5,7 @@ import XCTest
 
 final class GenerateControllerTests: XCTestCase {
 
-    func testWhenInvalidDir() throws {
+    func test_when_invalid_dir() throws {
         let methodsCalled = MethodsCalled()
 
         var template = TemplateUseCaseSpy(methods: methodsCalled)
@@ -30,7 +30,7 @@ final class GenerateControllerTests: XCTestCase {
         TestHelper.compareEnums(expected: expected, called: methodsCalled.called)
     }
 
-    func testWhenUserDontHaveTemplateDir() throws {
+    func test_when_user_dont_have_templateDir() throws {
         let methodsCalled = MethodsCalled()
 
         var template = TemplateUseCaseSpy(methods: methodsCalled)
@@ -57,7 +57,7 @@ final class GenerateControllerTests: XCTestCase {
         TestHelper.compareEnums(expected: expected, called: methodsCalled.called)
     }
 
-    func testWhenUserDontHaveTheSelectedTemplate() throws {
+    func test_when_user_dont_have_the_selected_template() throws {
         let methodsCalled = MethodsCalled()
 
         var template = TemplateUseCaseSpy(methods: methodsCalled)
@@ -86,7 +86,7 @@ final class GenerateControllerTests: XCTestCase {
         TestHelper.compareEnums(expected: expected, called: methodsCalled.called)
     }
 
-    func testHappyPath() throws {
+    func test_happy_path() throws {
         let methodsCalled = MethodsCalled()
 
         var template = TemplateUseCaseSpy(methods: methodsCalled)

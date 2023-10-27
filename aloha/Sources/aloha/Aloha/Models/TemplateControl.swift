@@ -5,5 +5,5 @@ struct TemplateControl: Decodable {
 
 struct ItemControl: Decodable {
     var model: String
-    var destination: String
+    var destination: String?
 }

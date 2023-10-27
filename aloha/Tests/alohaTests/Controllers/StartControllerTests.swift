@@ -5,7 +5,7 @@ import XCTest
 
 final class StartControllerTests: XCTestCase {
 
-    func testWhenUserHaveTemplateDir() throws {
+    func test_when_user_have_templateDir() throws {
         let methodsCalled = MethodsCalled()
 
         var template = TemplateUseCaseSpy(methods: methodsCalled)
@@ -23,7 +23,7 @@ final class StartControllerTests: XCTestCase {
         TestHelper.compareEnums(expected: expected, called: methodsCalled.called)
     }
 
-    func testWhenUserDontHaveTemplateDir() throws {
+    func test_when_user_dont_have_templateDir() throws {
         let methodsCalled = MethodsCalled()
 
         var template = TemplateUseCaseSpy(methods: methodsCalled)

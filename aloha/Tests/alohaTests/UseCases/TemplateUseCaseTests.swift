@@ -3,7 +3,7 @@ import XCTest
 
 final class TemplateUseCaseTests: XCTestCase {
 
-    func testTemplatesDir() throws {
+    func test_templatesDir() throws {
         let methodsCalled = MethodsCalled()
 
         let fileHelper = FileHelperSpy(methods: methodsCalled)
@@ -17,7 +17,7 @@ final class TemplateUseCaseTests: XCTestCase {
         TestHelper.compareEnums(expected: expected, called: methodsCalled.called)
     }
 
-    func testUserHaveTemplateDirSuccess() throws {
+    func test_user_have_templateDir_success() throws {
         let methodsCalled = MethodsCalled()
 
         var fileHelper = FileHelperSpy(methods: methodsCalled)
@@ -32,7 +32,7 @@ final class TemplateUseCaseTests: XCTestCase {
         TestHelper.compareEnums(expected: expected, called: methodsCalled.called)
     }
 
-    func testUserHaveTemplateDirFailure() throws {
+    func test_user_have_templateDir_failure() throws {
         let methodsCalled = MethodsCalled()
 
         var fileHelper = FileHelperSpy(methods: methodsCalled)
@@ -47,7 +47,7 @@ final class TemplateUseCaseTests: XCTestCase {
         TestHelper.compareEnums(expected: expected, called: methodsCalled.called)
     }
 
-    func testIsValidTemplateName() throws {
+    func test_IsValidTemplateName() throws {
         let methodsCalled = MethodsCalled()
         let fileHelper = FileHelperSpy(methods: methodsCalled)
 
@@ -60,13 +60,13 @@ final class TemplateUseCaseTests: XCTestCase {
         XCTAssertTrue(useCase.isValidTemplateName("TemplateName"))
     }
 
-    func testGetTemplate() throws {
+    func test_getTemplate() throws {
         let methodsCalled = MethodsCalled()
 
         var fileHelper = FileHelperSpy(methods: methodsCalled)
 
         fileHelper.listReturn = ["aloha/templates": ["template1"]]
-        fileHelper.fileToRead  = ["aloha/templates/template1/control.json": ControlMock.json1]
+        fileHelper.fileToRead  = ["aloha/templates/template1/control.json": ControlMock.json_regular]
 
         let expected: [Methods] = [
             .fileHelperListCalled(path: "aloha/templates"),
