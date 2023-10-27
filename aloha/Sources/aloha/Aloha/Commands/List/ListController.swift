@@ -8,6 +8,13 @@ struct ListController {
 
     func start() {
 
+        if !templateUseCase.userHaveTemplateDir() {
+            ui.message(Colors.cyan + "🐟 This project dont have aloha started yet.\n" +
+                       Colors.reset + "You can start it by running the command:\n" +
+                       Colors.green + "aloha start")
+            return
+        }
+
         let templates = templateUseCase.listTemplates()
 
         if templates.isEmpty {

@@ -28,22 +28,4 @@ enum ControlMock {
                             ]
                         }
                         """
-
-    static let json_without_destination = """
-                        {
-                            "targets": [
-                                {
-                                  "model": "__name__ExampleDir"
-                                },
-                                {
-                                  "model": "Package.swift"
-                                },
-                            ],
-                            "justCopy": [
-                                "JustCopyDir1",
-                                "JustCopyDir2",
-                                "JustCopyFile.swift"
-                            ]
-                        }
-                        """
 }
