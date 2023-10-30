@@ -19,8 +19,8 @@ struct TemplateMakerController {
 
         // ask what would be the name of the template
         guard let templateName = ui.userInput(
-            "Please type the" + Colors.green + " name of the template" +
-            Colors.reset + " to be" + Colors.cyan + " created:"
+            "Please type the name of the" + Colors.green  +
+            " template to be" + Colors.cyan + " created:"
         ) else {
             ui.error("Invalid input")
             return
@@ -43,7 +43,7 @@ struct TemplateMakerController {
         guard let source = ui.userInput(
             "Please type the" + Colors.cyan + " path"
             + Colors.reset + " to the source directory that would be the base of the template.\n" +
-            "Consider current path as " + Colors.green + fileHelper.currentDir()
+            "Consider the path relative to where aloha dir is located in you project (usually root dir)"
         ) else {
             ui.error("Invalid input")
             return
@@ -63,6 +63,17 @@ struct TemplateMakerController {
             ui.error("Invalid input")
             return
         }
+
+        // create the template root
+        let templateRoot = Constants.templateDir + "/\(templateName)"
+//        let created = fileHelper.createDir(templateRoot, withIntermediateDirectories: false)
+//        if !created {
+//            return
+//        }
+
+        print(templateName)
+
+        // create the control file
 
         // copy eveything to template dir
         print("do stuff ======= ")

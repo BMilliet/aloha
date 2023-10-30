@@ -8,10 +8,10 @@ struct FileHelperSpy: FileHelper {
     var currentDirReturn = "AlohaHome"
     var createDirReturn = false
     var homePathReturn = "AlohaHome/"
-    var existReturn: [String: Bool] = [String: Bool]()
-    var isDirReturn: [String: Bool] = [String: Bool]()
-    var fileToRead: [String: String] = [String: String]()
-    var listReturn: [String: [String]] = [String: [String]]()
+    var existReturn = [String: Bool]()
+    var isDirReturn = [String: Bool]()
+    var fileToRead = [String: String]()
+    var listReturn = [String: [String]]()
 
     var methods: MethodsCalled
 

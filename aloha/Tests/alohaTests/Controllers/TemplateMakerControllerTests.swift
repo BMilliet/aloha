@@ -5,37 +5,46 @@ import XCTest
 
 final class TemplateMakerControllerTests: XCTestCase {
 
-    func testWhenUserHaveTemplateDir() throws {
+    func test_happy_path() throws {
         let methodsCalled = MethodsCalled()
 
+        var ui = UISpy()
         var template = TemplateUseCaseSpy(methods: methodsCalled)
+        var fileHelper = FileHelperSpy(methods: methodsCalled)
+
+        let sourcePath = "SomeProject/Modules/Feature"
+
+        template.userHaveTemplateDirReturn = false
+        template.isValidTemplateNameReturn = ["mvvm": true]
+        template.listTemplatesReturn = ["viper"]
+        fileHelper.existReturn[sourcePath] = true
+
+        ui.registeredUserInput[
+            "Please type the name of the" + Colors.green  +
+            " template to be" + Colors.cyan + " created:"
+        ] = "mvvm"
+
+        ui.registeredUserInput[
+            "Please type the" + Colors.cyan + " path"
+            + Colors.reset + " to the source directory that would be the base of the template.\n" +
+            "Consider the path relative to where aloha dir is located in you project (usually root dir)"
+        ] = sourcePath
+
+        ui.registeredUserInput[
+            "Please type the key word that would be considered" +
+            Colors.cyan + " dynamic" + Colors.reset + " by the template:"
+        ] = "Feature"
 
         template.userHaveTemplateDirReturn = true
 
         let expected: [Methods] = [
-            .templateUserHaveTemplateDirCalled
-        ]
-
-        let controller = StartController(ui: UISpy(), templateUseCase: template)
-
-        controller.start()
-
-        TestHelper.compareEnums(expected: expected, called: methodsCalled.called)
-    }
-
-    func testWhenUserDontHaveTemplateDir() throws {
-        let methodsCalled = MethodsCalled()
-
-        var template = TemplateUseCaseSpy(methods: methodsCalled)
-
-        template.userHaveTemplateDirReturn = false
-
-        let expected: [Methods] = [
             .templateUserHaveTemplateDirCalled,
-            .templateCreateAlohaCalled
+            .templateIsValidTemplateNameCalled("mvvm"),
+            .templateListTemplatesCalled,
+            .fileHelperExistCalled(path: sourcePath)
         ]
 
-        let controller = StartController(ui: UISpy(), templateUseCase: template)
+        let controller = TemplateMakerController(ui: ui, templateUseCase: template, fileHelper: fileHelper)
 
         controller.start()
 
